@@ -20,7 +20,6 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-
 // close modal form
 function closeModal() {
   modalbg.style.display = "none";
@@ -55,7 +54,6 @@ function invalidWarning(target, index) {
 let inputsArray = Array.prototype.slice.call(document.querySelectorAll(".text-control"));
 inputsArray.push(document.querySelector(".checkbox-input"));
 inputsArray.push(document.getElementById("checkbox1"));
-
 
 
 // submit form
