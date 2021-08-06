@@ -539,6 +539,14 @@
   text-align: center;
   }
   }
+
+  @media screen and (max-width: 480px) {
+   
+    .hero-content {
+    min-width: auto;
+    }
+
+  }
   
   @keyframes modalopen {
   from {
