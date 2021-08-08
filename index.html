@@ -73,6 +73,7 @@
                   id="first"
                   name="first"
                   minlength="2"
+                  pattern="^[a-zA-Z ]*$"
                   required
                 /><br>
               </div>
@@ -84,6 +85,7 @@
                   type="text"
                   id="last"
                   name="last"
+                  pattern="^[a-zA-Z ]*$"
                   required
                 /><br>
               </div>
@@ -208,9 +210,8 @@
                 <br>
               </div>
               <input
-                class="btn-submit"
+                class="btn-submit button"
                 type="submit"
-                class="button"
                 value="C'est parti"
                 onclick="validate()"
               />
