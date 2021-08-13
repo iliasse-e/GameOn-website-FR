@@ -8,8 +8,15 @@ function editNav() {
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
+const signUpModal = document.querySelector("#sign-up-modal");
+const closeSignUpModal = document.querySelector("#close-submit");
+const confirmationModal = document.querySelector("#submit-state-modal");
+const closeconfirmationModal = document.querySelector("#close-confirmation");
+const modalBg = document.querySelector(".bground")
 const modalBtn = document.querySelectorAll(".modal-btn");
+const okBtn = document.querySelector("#submit-state-modal .btn-ok")
+const submitBtn = document.querySelector("#submit-state-modal .btn-submit")
+
 const formData = document.querySelectorAll(".formData");
 const form = document.querySelector(".modal-body > form");
 
@@ -18,114 +25,101 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 // launch modal form
 function launchModal() {
-  modalbg.style.display = "block";
+  signUpModal.style.display = "block";
 }
 
 // close modal form
-function closeModal() {
-  modalbg.style.display = "none";
+function closeModal(modal) {
+  modal.style.display = "none";
 }
 
-// add red warning content if user input is invalid (prend 2 paramètres: nom de l'id de l'input / index de l'input qui renvoit un content d'erreur)
-function invalidWarning(target, index) {
+// add close function to crosses and button
+closeconfirmationModal.addEventListener("click", () => { closeModal(confirmationModal)});
+closeSignUpModal.addEventListener("click", () => { closeModal(signUpModal)});
+okBtn.addEventListener("click", () => { closeModal(confirmationModal)});
 
-  const errorMessage = [
-    "Veuillez entrer 2 caractères ou plus pour le champ du prénom",
-    "Veuillez entrer 2 caractères ou plus pour le champ du nom",
-    "Veuillez entrer une adresse mail valide",
-    "Vous devez entrer votre date de naissance",
-    "Veuillez entrer un nombre entre 0 et 99",
-    "Veuillez selectionner une ville",
-    "Vous devez vérifier que vous acceptez les termes et conditions",
-  ]
-
-  if (!target.validity.valid) {
-
-  submissionSuccedMessage("p", errorMessage[index], "data-error", target)
-
+// form fields objects
+const formFields = [
+  {
+    inputContainer: document.getElementById("formData-first"),
+    input: document.getElementById("first"),
+    errorMessage: "Veuillez entrer 2 lettres ou plus pour le champ du prénom",
+  },
+  {
+    inputContainer: document.getElementById("formData-last"),
+    input: document.getElementById("last"),
+    errorMessage: "Veuillez entrer 2 lettres ou plus pour le champ du nom",
+  },
+  {
+    inputContainer: document.getElementById("formData-email"),
+    input: document.getElementById("email"),
+    errorMessage: "Veuillez entrer une adresse mail valide",
+  },
+  {
+    inputContainer: document.getElementById("formData-birthdate"),
+    input: document.getElementById("birthdate"),
+    errorMessage: "Vous devez entrer votre date de naissance",
+  },
+  {
+    inputContainer: document.getElementById("formData-quantity"),
+    input: document.getElementById("quantity"),
+    errorMessage: "Veuillez entrer un nombre entre 0 et 99",
+  },
+  {
+    inputContainer: document.getElementById("formData-location"),
+    input: document.getElementById("location1"),
+    errorMessage: "Veuillez selectionner une ville",
+  },
+  {
+    inputContainer: document.getElementById("formData-user-condition"),
+    input: document.getElementById("checkbox1"),
+    errorMessage: "Vous devez vérifier que vous acceptez les termes et conditions",
   }
-}
+]
 
-// gather all form inputs in an array
-let inputsArray = Array.prototype.slice.call(document.querySelectorAll(".text-control"));
-inputsArray.push(document.querySelector(".checkbox-input"));
-inputsArray.push(document.getElementById("checkbox1"));
+// apply check validity to each input
+formFields.forEach(field => {
+   field.input.addEventListener("change", () => { checkValidity(field)})
+  }
+)
 
+// form field validity inspection
+function checkValidity(formField) {
 
-// add new html element to modal when submission succeded
-function submissionSuccedMessage(htmlElement, content, className, position) {
-
-  const node = document.createElement(""+htmlElement);
-  const textnode = document.createTextNode(""+content);
-  node.appendChild(textnode);
-
-  if (position == form) {
-    position.after(node);
-    node.className = ""+className;
+  if (!formField.input.validity.valid) {
+    formField.inputContainer.setAttribute("data-error", formField.errorMessage);
+    formField.inputContainer.setAttribute("data-error-visible", "true")
   }
 
   else {
-    position.parentNode.after(node);
-    node.className = ""+className;
-    position.classList.add("input-error");
+    formField.inputContainer.setAttribute("data-error", "");
+    formField.inputContainer.setAttribute("data-error-visible", "")
   }
-  
 }
 
-function inputsChecker() {
+// inspects if form is fully filled
+function formIsValid() {
 
-  let invalidInputs = inputsArray.length;
-  for (let i = 0; i < inputsArray.length; i++) {
-    if (inputsArray[i].validity.valid) {
-      invalidInputs --;
-    }
-  }
-  return invalidInputs
-}
+  let valid = true;
 
-// removes red error messages
-function errorMessageRemover(className) {
-  let target = document.querySelectorAll(""+className);
-  if (className == ".input-error") {
-    for (let i=0; i < target.length; i++) {
-      target[i].classList.remove("input-error");
+  for (let i = 0; i < formFields.length; i++) {  
+    if (formFields[i].input.checkValidity() == false) {
+      valid = false;
     }
   }
-  else {
-    for (let i=0; i < target.length; i++) {
-      target[i].remove();
-    }
-  }
+
+return valid
 }
 
 // submit form
+form.addEventListener("submit", validate);
+
 function validate() {
 
-  // Removes all error messages
-  errorMessageRemover(".data-error");
-  
-  // removes all input red border
-  errorMessageRemover(".input-error");
-
-  if (inputsChecker() < 1) {
-
-    // delete data and hide form
+  if (formIsValid()) {
+    // delete data and hide form and brings up confirmation modal
     document.getElementById("form").reset();
-    form.style.display = "none";
-
-    // add ok button & content of sumbission
-    submissionSuccedMessage("button", "Ok", "btn-submit btn-ok", form)
-    submissionSuccedMessage("p", "Merci ! Votre réservation a été reçue.", "form-validation-content", form)
-
-    // add up closing functionality to "Ok" button
-    document.querySelector(".btn-ok").setAttribute("onclick", "closeModal();")
-  }
-
-  else {
-    // calls function to check each modal's input
-    inputsArray.forEach(item => {
-      item.addEventListener("input", invalidWarning(item, inputsArray.indexOf(item)));
-    });
+    signUpModal.style.display = "none";
+    confirmationModal.style.display = "block"
   }
 }
-

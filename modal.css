@@ -342,19 +342,11 @@
   cursor: pointer;
   border: 0;
   }
-  
-  .btn-ok {
-  margin-bottom: 20px;
+
+  #submit-state-modal p {
+    margin: 52% 0;
   }
   
-  /* Message after submit */
-  .form-validation-message {
-  padding-top: 50%;
-  text-align: center;
-  position: relative;
-  top: -50%;
-  height: 700px;
-  }
   
   /* custom select styles */
   .custom-select {
