@@ -16,7 +16,6 @@ const modalBg = document.querySelector(".bground")
 const modalBtn = document.querySelectorAll(".modal-btn");
 const okBtn = document.querySelector("#submit-state-modal .btn-ok")
 const submitBtn = document.querySelector("#submit-state-modal .btn-submit")
-
 const formData = document.querySelectorAll(".formData");
 const form = document.querySelector(".modal-body > form");
 
@@ -86,11 +85,10 @@ formFields.forEach(field => {
 // form field validity inspection
 function checkValidity(formField) {
 
-  if (!formField.input.validity.valid) {
+  if (!formField.input.validity.valid || formField.input.validity.valueMissing) {
     formField.inputContainer.setAttribute("data-error", formField.errorMessage);
     formField.inputContainer.setAttribute("data-error-visible", "true")
   }
-
   else {
     formField.inputContainer.setAttribute("data-error", "");
     formField.inputContainer.setAttribute("data-error-visible", "")
@@ -103,23 +101,21 @@ function formIsValid() {
   let valid = true;
 
   for (let i = 0; i < formFields.length; i++) {  
-    if (formFields[i].input.checkValidity() == false) {
-      valid = false;
-    }
+    if (formFields[i].input.checkValidity() == false) {valid = false}
   }
-
-return valid
+  return valid
 }
 
 // submit form
-form.addEventListener("submit", validate);
-
 function validate() {
 
   if (formIsValid()) {
-    // delete data and hide form and brings up confirmation modal
-    document.getElementById("form").reset();
+    // delete data and brings up confirmation modal
+    form.reset();
     signUpModal.style.display = "none";
     confirmationModal.style.display = "block"
+  }
+  else {
+    formFields.forEach(field => checkValidity(field))
   }
 }

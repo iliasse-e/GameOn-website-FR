@@ -225,15 +225,6 @@
   .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
   }
-  .data-error {
-  padding: 5px 0;
-  font-size: 0.4em;
-  color: #e54858;
-  }
-  
-  .input-error {
-  border: 2px solid #e54858;
-  }
   
   input[data-error]::after {
   content: attr(data-error);
@@ -344,7 +335,7 @@
   }
 
   #submit-state-modal p {
-    margin: 52% 0;
+    margin: 75% 0;
   }
   
   
