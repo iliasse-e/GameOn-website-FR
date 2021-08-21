@@ -101,7 +101,8 @@ function formIsValid() {
   let valid = true;
 
   for (let i = 0; i < formFields.length; i++) {  
-    if (formFields[i].input.checkValidity() == false) {valid = false}
+    if (formFields[i].input.checkValidity() == false) {
+      return false}
   }
   return valid
 }
